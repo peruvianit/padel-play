@@ -1,6 +1,6 @@
-package it.peruvianit.service.system;
+package it.peruvianit.delegator.system.info.service;
 
-import it.peruvianit.delegator.system.info.response.SystemInfoResponse;
+import it.peruvianit.delegator.system.common.dto.SystemInfoDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -28,8 +28,8 @@ public class SystemInfoService {
     String buildUser;
 
 
-    public SystemInfoResponse getInfo() {
-        return SystemInfoResponse.builder()
+    public SystemInfoDto getInfo() {
+        return SystemInfoDto.builder()
                 .version(version)
                 .buildTimestamp(buildTimestamp)
                 .environment(environment)
