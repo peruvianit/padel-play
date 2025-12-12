@@ -1,6 +1,8 @@
 package it.peruvianit.core.error;
 
 import it.peruvianit.core.exception.ApplicationException;
+import it.peruvianit.core.i18n.MessageResolver;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
@@ -16,6 +18,9 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
 
     private static final Logger LOG = Logger.getLogger(GlobalExceptionHandler.class);
 
+    @Inject
+    MessageResolver messageResolver;
+
     @Context
     UriInfo uriInfo;
 
@@ -27,9 +32,15 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
         if (ex instanceof ApplicationException appEx) {
             LOG.warnf("Handled exception [%s] - %s", correlationId, appEx.getMessage());
 
+            String localizedMessage = messageResolver.resolve(
+                    appEx.getMessageKey(),
+                    appEx.getParams()
+            );
+
             return Response.status(appEx.getHttpStatus())
                     .entity(new ErrorResponse(
                             appEx.getErrorCode(),
+                            localizedMessage,
                             appEx.getMessage(),
                             ex.getCause() != null ? ex.getCause().toString() : null,
                             uriInfo.getPath(),
@@ -45,6 +56,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
         return Response.status(500)
                 .entity(new ErrorResponse(
                         "INTERNAL_ERROR",
+                        messageResolver.resolve("ERRORE_GENERICO"),
                         "Unexpected system error",
                         ex.getMessage(),
                         uriInfo.getPath(),
@@ -53,5 +65,4 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
                 ))
                 .build();
     }
-
 }

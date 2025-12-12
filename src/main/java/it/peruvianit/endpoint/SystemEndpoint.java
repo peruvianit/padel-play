@@ -1,20 +1,22 @@
 package it.peruvianit.endpoint;
 
 import it.peruvianit.core.exception.BusinessException;
-import it.peruvianit.core.exception.ValidationException;
 import it.peruvianit.delegator.system.SystemFacadeDelegator;
 import it.peruvianit.delegator.system.info.response.SystemInfoResponse;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -25,6 +27,9 @@ public class SystemEndpoint {
     @Inject
     SystemFacadeDelegator delegator;
 
+    // =========================
+    // SYSTEM INFO
+    // =========================
     @GET
     @Path("/info")
     @Produces(MediaType.APPLICATION_JSON)
@@ -32,37 +37,75 @@ public class SystemEndpoint {
             summary = "Ottiene le informazioni di sistema",
             description = "Restituisce dettagli come versione, build, ambiente, hostname, Java version, uptime, ecc."
     )
+    @Parameter(
+            name = "Accept-Language",
+            in = ParameterIn.HEADER,
+            description = "Lingua della risposta (es: it, en)",
+            schema = @Schema(type = SchemaType.STRING, example = "en")
+    )
     @APIResponse(
             responseCode = "200",
             description = "Informazioni ottenute con successo",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(implementation = SystemInfoResponse.class, type = SchemaType.OBJECT)
+                    schema = @Schema(implementation = SystemInfoResponse.class)
             )
     )
     @APIResponse(
             responseCode = "500",
             description = "Errore interno al server"
     )
-    public Response info() {
+    public Response info(
+            @HeaderParam("Accept-Language") String language
+    ) {
+        // NOTA: language non serve usarla, è solo per Swagger/OpenAPI
         return delegator.getSystemInfo();
     }
 
+    // =========================
+    // BUSINESS ERROR TEST
+    // =========================
     @GET
     @Path("/erro-application")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response errorApplication() {
-        if (true){
-            throw new BusinessException("Errore de validazione");
-        }
-        return delegator.getSystemInfo();
+    @Operation(summary = "Simula un errore applicativo (Business)")
+    @Parameter(
+            name = "Accept-Language",
+            in = ParameterIn.HEADER,
+            description = "Lingua della risposta (es: it, en)",
+            schema = @Schema(type = SchemaType.STRING, example = "en")
+    )
+    @APIResponse(
+            responseCode = "422",
+            description = "Errore di business"
+    )
+    public Response errorApplication(
+            @HeaderParam("Accept-Language") String language
+    ) {
+        throw new BusinessException("ERROR_TEST", "VALORE_A", 123);
     }
 
+    // =========================
+    // SYSTEM ERROR TEST
+    // =========================
     @GET
     @Path("/error-system")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response errorSystem() {
-        int c = 4/0;
+    @Operation(summary = "Simula un errore di sistema")
+    @Parameter(
+            name = "Accept-Language",
+            in = ParameterIn.HEADER,
+            description = "Lingua della risposta (es: it, en)",
+            schema = @Schema(type = SchemaType.STRING, example = "en")
+    )
+    @APIResponse(
+            responseCode = "500",
+            description = "Errore di sistema"
+    )
+    public Response errorSystem(
+            @HeaderParam("Accept-Language") String language
+    ) {
+        int c = 4 / 0;
         return delegator.getSystemInfo();
     }
 }
