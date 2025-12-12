@@ -1,5 +1,7 @@
 package it.peruvianit.endpoint;
 
+import it.peruvianit.core.exception.BusinessException;
+import it.peruvianit.core.exception.ValidationException;
 import it.peruvianit.delegator.system.SystemFacadeDelegator;
 import it.peruvianit.delegator.system.info.response.SystemInfoResponse;
 import jakarta.inject.Inject;
@@ -43,6 +45,24 @@ public class SystemEndpoint {
             description = "Errore interno al server"
     )
     public Response info() {
+        return delegator.getSystemInfo();
+    }
+
+    @GET
+    @Path("/erro-application")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response errorApplication() {
+        if (true){
+            throw new BusinessException("Errore de validazione");
+        }
+        return delegator.getSystemInfo();
+    }
+
+    @GET
+    @Path("/error-system")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response errorSystem() {
+        int c = 4/0;
         return delegator.getSystemInfo();
     }
 }

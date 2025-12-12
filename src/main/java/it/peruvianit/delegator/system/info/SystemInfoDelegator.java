@@ -1,6 +1,5 @@
 package it.peruvianit.delegator.system.info;
 
-import it.peruvianit.core.exception.ValidationException;
 import it.peruvianit.delegator.system.common.mapper.SystemInfoMapper;
 import it.peruvianit.delegator.system.info.service.SystemInfoService;
 import it.peruvianit.delegator.system.common.dto.SystemInfoDto;
