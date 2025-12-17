@@ -41,7 +41,7 @@ public class GlobalExceptionHandler implements ExceptionMapper<Throwable> {
                     .entity(new ErrorResponse(
                             appEx.getErrorCode(),
                             localizedMessage,
-                            appEx.getMessage(),
+                            localizedMessage,
                             ex.getCause() != null ? ex.getCause().toString() : null,
                             uriInfo.getPath(),
                             correlationId,
