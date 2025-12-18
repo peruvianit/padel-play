@@ -3,6 +3,7 @@ package it.peruvianit.delegator.system;
 import it.peruvianit.delegator.system.health.SystemHealthDelegator;
 import it.peruvianit.delegator.system.info.SystemInfoDelegator;
 import it.peruvianit.delegator.system.log.SystemLogDelegator;
+import it.peruvianit.delegator.system.ping.SystemPingDelegator;
 import it.peruvianit.delegator.system.time.SystemTimeDelegator;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -21,6 +22,8 @@ public class SystemFacadeDelegator {
 
     private final SystemLogDelegator systemLogDelegator;
 
+    private final SystemPingDelegator systemPingDelegator;
+
     public Response getSystemInfo() {
         return systemInfoDelegator.response();
     }
@@ -35,5 +38,9 @@ public class SystemFacadeDelegator {
 
     public Response getSystemLog() {
         return systemLogDelegator.response();
+    }
+
+    public Response getSystemPing() {
+        return systemPingDelegator.response();
     }
 }
