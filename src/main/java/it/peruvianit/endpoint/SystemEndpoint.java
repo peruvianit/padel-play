@@ -4,6 +4,7 @@ import it.peruvianit.core.exception.BusinessException;
 import it.peruvianit.delegator.system.SystemFacadeDelegator;
 import it.peruvianit.delegator.system.health.response.SystemHealthResponse;
 import it.peruvianit.delegator.system.info.response.SystemInfoResponse;
+import it.peruvianit.delegator.system.log.response.SystemLogResponse;
 import it.peruvianit.delegator.system.time.response.SystemTimeResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -95,7 +96,7 @@ public class SystemEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(
             summary = "Applicazione è operativa in questo momento",
-            description = "Informazioni se l’applicazione è operativa in questo momentoa"
+            description = "Informazioni se l’applicazione è operativa in questo momento"
     )
     @APIResponse(
             responseCode = "200",
@@ -111,6 +112,29 @@ public class SystemEndpoint {
     )
     public Response health() {
         return delegator.getSystemHealth();
+    }
+
+    @GET
+    @Path("/logs/info")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(
+            summary = "Informazioni della configurazione attuale del log",
+            description = "Informazioni dell configurazione log"
+    )
+    @APIResponse(
+            responseCode = "200",
+            description = "Informazioni ottenute con successo",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = SystemLogResponse.class)
+            )
+    )
+    @APIResponse(
+            responseCode = "500",
+            description = "Errore interno al server"
+    )
+    public Response log() {
+        return delegator.getSystemLog();
     }
 
     // =========================
