@@ -5,6 +5,7 @@ import it.peruvianit.delegator.system.SystemFacadeDelegator;
 import it.peruvianit.delegator.system.health.response.SystemHealthResponse;
 import it.peruvianit.delegator.system.info.response.SystemInfoResponse;
 import it.peruvianit.delegator.system.log.response.SystemLogResponse;
+import it.peruvianit.delegator.system.metrics.response.SystemMetricsResponse;
 import it.peruvianit.delegator.system.ping.response.SystemPingResponse;
 import it.peruvianit.delegator.system.time.response.SystemTimeResponse;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -159,6 +160,29 @@ public class SystemEndpoint {
     )
     public Response ping() {
         return delegator.getSystemPing();
+    }
+
+    @GET
+    @Path("/metrics")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(
+            summary = "Verifica informazione del stato della tua System AP",
+            description = "Verifica informazione del stato della tua System AP"
+    )
+    @APIResponse(
+            responseCode = "200",
+            description = "Informazioni ottenute con successo",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = SystemMetricsResponse.class)
+            )
+    )
+    @APIResponse(
+            responseCode = "500",
+            description = "Errore interno al server"
+    )
+    public Response metrics() {
+        return delegator.getSystemMetrics();
     }
 
     // =========================
