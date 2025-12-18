@@ -1,5 +1,6 @@
 package it.peruvianit.delegator.system;
 
+import it.peruvianit.delegator.system.health.SystemHealthDelegator;
 import it.peruvianit.delegator.system.info.SystemInfoDelegator;
 import it.peruvianit.delegator.system.time.SystemTimeDelegator;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,11 +16,17 @@ public class SystemFacadeDelegator {
 
     private final SystemTimeDelegator systemTimeDelegator;
 
+    private final SystemHealthDelegator systemHealthDelegator;
+
     public Response getSystemInfo() {
         return systemInfoDelegator.response();
     }
 
     public Response getSystemTime() {
         return systemTimeDelegator.response();
+    }
+
+    public Response getSystemHealth() {
+        return systemHealthDelegator.response();
     }
 }

@@ -2,6 +2,7 @@ package it.peruvianit.endpoint;
 
 import it.peruvianit.core.exception.BusinessException;
 import it.peruvianit.delegator.system.SystemFacadeDelegator;
+import it.peruvianit.delegator.system.health.response.SystemHealthResponse;
 import it.peruvianit.delegator.system.info.response.SystemInfoResponse;
 import it.peruvianit.delegator.system.time.response.SystemTimeResponse;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -87,6 +88,29 @@ public class SystemEndpoint {
     )
     public Response time() {
         return delegator.getSystemTime();
+    }
+
+    @GET
+    @Path("/health")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(
+            summary = "Applicazione è operativa in questo momento",
+            description = "Informazioni se l’applicazione è operativa in questo momentoa"
+    )
+    @APIResponse(
+            responseCode = "200",
+            description = "Informazioni ottenute con successo",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = SystemHealthResponse.class)
+            )
+    )
+    @APIResponse(
+            responseCode = "500",
+            description = "Errore interno al server"
+    )
+    public Response health() {
+        return delegator.getSystemHealth();
     }
 
     // =========================
