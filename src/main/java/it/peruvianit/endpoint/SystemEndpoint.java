@@ -3,6 +3,8 @@ package it.peruvianit.endpoint;
 import it.peruvianit.core.exception.BusinessException;
 import it.peruvianit.delegator.system.SystemFacadeDelegator;
 import it.peruvianit.delegator.system.info.response.SystemInfoResponse;
+import it.peruvianit.delegator.system.time.response.SystemTimeResponse;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -11,6 +13,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -22,10 +25,11 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Path("/system")
 @Tag(name = "System", description = "Operazioni relative allo stato e alle informazioni del sistema")
+@ApplicationScoped
+@RequiredArgsConstructor
 public class SystemEndpoint {
 
-    @Inject
-    SystemFacadeDelegator delegator;
+    private final SystemFacadeDelegator delegator;
 
     // =========================
     // SYSTEM INFO
@@ -60,6 +64,29 @@ public class SystemEndpoint {
     ) {
         // NOTA: language non serve usarla, è solo per Swagger/OpenAPI
         return delegator.getSystemInfo();
+    }
+
+    @GET
+    @Path("/time")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(
+            summary = "Informazioni temporali del sistema",
+            description = "Restituisce informazioni temporali UTC del sistema"
+    )
+    @APIResponse(
+            responseCode = "200",
+            description = "Informazioni ottenute con successo",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = SystemTimeResponse.class)
+            )
+    )
+    @APIResponse(
+            responseCode = "500",
+            description = "Errore interno al server"
+    )
+    public Response time() {
+        return delegator.getSystemTime();
     }
 
     // =========================

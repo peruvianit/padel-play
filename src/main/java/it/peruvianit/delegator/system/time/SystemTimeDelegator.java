@@ -1,8 +1,8 @@
-package it.peruvianit.delegator.system.info;
+package it.peruvianit.delegator.system.time;
 
+import it.peruvianit.delegator.system.common.dto.SystemTimeDto;
 import it.peruvianit.delegator.system.common.mapper.SystemInfoMapper;
-import it.peruvianit.delegator.system.info.service.SystemInfoService;
-import it.peruvianit.delegator.system.common.dto.SystemInfoDto;
+import it.peruvianit.delegator.system.time.service.SystemTimeService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
@@ -11,14 +11,14 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class SystemInfoDelegator {
+public class SystemTimeDelegator {
 
-    private final SystemInfoService service;
+    private final SystemTimeService service;
 
     private final SystemInfoMapper mapper;
 
     public Response response() {
-        SystemInfoDto dto = service.getInfo();
+        SystemTimeDto dto = service.getSystemTime();
 
         return Response.status(Status.OK)
                 .entity(mapper.toResponse(dto))
