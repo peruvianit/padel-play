@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class SystemFacadeDelegator {
 
     private final SystemInfoDelegator systemInfoDelegator;

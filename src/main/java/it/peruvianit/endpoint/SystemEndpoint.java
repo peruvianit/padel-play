@@ -26,7 +26,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/system")
 @Tag(name = "System", description = "Operazioni relative allo stato e alle informazioni del sistema")
 @ApplicationScoped
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class SystemEndpoint {
 
     private final SystemFacadeDelegator delegator;

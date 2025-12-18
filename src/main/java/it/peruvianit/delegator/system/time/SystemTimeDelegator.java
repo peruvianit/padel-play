@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class SystemTimeDelegator {
 
     private final SystemTimeService service;
